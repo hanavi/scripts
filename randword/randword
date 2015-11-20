@@ -6,6 +6,7 @@
 # Date created: 2015-11-17
 # Date last modified: 2015-11-17
 # Description: A quick and dirty random word generator.
+# Some of the akward and bad formatting in this script is intentional...
 #############################################################################
 
 __author__ = "James Casey"
