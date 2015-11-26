@@ -1,10 +1,17 @@
 #!/bin/bash
 
-# Quick script to generate a random MAC address
-# This could probably be cleaner....
+##########################################################################
+# Name: upadatenetwork.sh (updatenetwork.command)
+# Author: James Casey
+# Version: 0.1
+# Date Created: 2015-11-26
+# Date Last Modified: 2015-11-26
+# Description:  This was designed to set the MAC address on a Macbook Pro
+# running El Capitan to a random value.
+##########################################################################
 
-## Dell and Lenovo from some website...
 # Start with a valid vendor prefix
+# Dell and Lenovo from some website...
 START=( f8:cf:c5 ec:89:f5 e8:91:20 e4:90:7e e0:2c:b2 d8:71:57 d4:22:3f \
         cc:07:e4 c8:dd:c9 ac:38:70 a4:8c:db a0:32:99 98:ff:d0 88:70:8c \
         84:10:0d 80:cf:41 74:04:2b 70:72:0d 6c:5f:1c 60:d9:a0 60:99:d1 \
@@ -52,10 +59,10 @@ check=$(ifconfig en0 |grep ether |awk '{print $2}')
 
 echo "Verify MAC:           ${check}"
 echo ""
-echo "-----------------------------------------------------"
-echo "NOTE: if the both addresses are not the same, you may"
+echo "----------------------------------------------------------"
+echo "NOTE: if the both addresses are not the same, you probably"
 echo "need to rerun the script."
-echo "-----------------------------------------------------"
+echo "----------------------------------------------------------"
 echo ""
 echo ""
 
