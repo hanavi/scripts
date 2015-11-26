@@ -1,8 +1,10 @@
 #!/bin/bash
+
 # Quick script to generate a random MAC address
 # This could probably be cleaner....
 
 ## Dell and Lenovo from some website...
+# Start with a valid vendor prefix
 START=( f8:cf:c5 ec:89:f5 e8:91:20 e4:90:7e e0:2c:b2 d8:71:57 d4:22:3f \
         cc:07:e4 c8:dd:c9 ac:38:70 a4:8c:db a0:32:99 98:ff:d0 88:70:8c \
         84:10:0d 80:cf:41 74:04:2b 70:72:0d 6c:5f:1c 60:d9:a0 60:99:d1 \
@@ -20,17 +22,32 @@ START=( f8:cf:c5 ec:89:f5 e8:91:20 e4:90:7e e0:2c:b2 d8:71:57 d4:22:3f \
         00:15:c5 00:14:22 00:13:72 00:12:3f 00:11:43 00:0f:1f 00:0d:56 \
         00:0b:db 00:08:74 00:06:5b )
 
+# Select prefix at random
 n=$(python -c "import random; print(random.randint(0,107))")
+
+# Get a random identifier for the last part of the MAC
 END=$(openssl rand -hex 3 | sed 's/\(..\)/\1:/g; s/.$//')
+
+# Join the prefix and the ending to get the new MAC address
 NEWMAC="${START[${n}]}:${END}"
 
 echo ""
 echo ""
 echo "Changing MAC address: ${NEWMAC}"
+
+# Change the MAC address for en0 (This may be different on other machines!)
 sudo /sbin/ifconfig en0 ether ${NEWMAC}
+
+# Bring the network down so the changes can go into effect
 sudo /sbin/ifconfig en0 down
+
+# Wait a couple seconds before bring the network back up
 sleep 2
+
+# Get everything up again... This should also rerun DHCP with the new MAC
 sudo /sbin/ifconfig en0 up
+
+# Make sure the changes actually happened
 check=$(ifconfig en0 |grep ether |awk '{print $2}')
 
 echo "Verify MAC:           ${check}"
@@ -42,5 +59,6 @@ echo "-----------------------------------------------------"
 echo ""
 echo ""
 
+# Give the user a sec to compare the MACs
 read -p 'Press Enter to continue...'
 
