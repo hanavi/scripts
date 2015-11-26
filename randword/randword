@@ -27,7 +27,7 @@ fname = "/usr/share/dict/words"
 words = array(open(fname).readlines())
 
 # Get word count
-count = int(sys.argv[1]) if len(sys.argv) == 2 else 5
+count = int(sys.argv[1]) if len(sys.argv) == 2 else randint(3,10)
 
 # Print out words
 print(" ".join([word.strip() for word in words[randint(0,len(words),count)]]))
