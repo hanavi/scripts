@@ -152,6 +152,8 @@ def verify(fname):
 
     hash_local = get_hash(pw_local,hash_length=hash_length,
                           iterations=iterations)
+    hash_remote = get_hash(pw_remote,hash_length=hash_length,
+                           iterations=iterations)
 
     # Clean up the hashes for print out
     clean_local = ""
@@ -159,8 +161,6 @@ def verify(fname):
         if i % 4 == 0:
             clean_local += " "
         clean_local += hash_local[i]
-    hash_remote = get_hash(pw_remote,hash_length=hash_length,
-                           iterations=iterations)
 
     clean_remote = ""
     for i in range(0, hash_length ):
