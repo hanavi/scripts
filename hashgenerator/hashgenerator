@@ -56,7 +56,6 @@ def get_count(timestep=None):
         start = datetime.datetime(2776,1,1)
         now = datetime.datetime.utcnow()
         delta = start.date() - now.date()
-        print(delta.days)
         return delta.days
 
     ## This generates faster hashes. New hash every minute
