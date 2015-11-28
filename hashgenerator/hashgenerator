@@ -38,16 +38,19 @@ import base64
 import hashlib
 import sys
 import getpass
-import gnupg
 import argparse
 
+class PasswordDecryptionError(Exception):
+    def __init__(self, message, errors):
+        super().__init__(message)
+        self.errors = errors
 
 def get_count(timestep=None):
-    """ Get the number of days between now and the final date.  This is used
-    to determine the number of times we hash
+    """ Get the the amount of time between now and the final date.  This is
+    used to determine the number of times we hash.
 
-    The hash will change every day at midnight or every minute based on the
-    arguments passed.
+    The hash will change every day at midnight (UTC) or every minute depending
+    on the arguments passed.
     """
 
     ## The default behaviour for generating a daily hash
@@ -97,10 +100,23 @@ def get_hash(password, hash_length=12, iterations=None, use_safe=False):
 def load_passwords(fname):
     """ Load the passwords from a file encrypted for a local GPG private key
     """
+
+    # I think this is frowned upon by some standard somewhere, but by placing
+    # the gnupg import here, we allow the short hash generator to run even if
+    # we don't have python3-gnupg on a particular system (I am looking at you
+    # Tails).
+    import gnupg
+
     fd = open(fname,"rb")
 
     gpg = gnupg.GPG()
-    data = gpg.decrypt_file(fd).data.decode()
+    data = gpg.decrypt_file(fd)
+
+    if data.status != "decryption ok":
+        raise(PasswordDecryptionError("Failed to decrypt passwords",
+                                      data.status))
+
+    data = data.data.decode()
 
     passwords = data.split("\n")
     my_password = passwords[0]
@@ -155,17 +171,17 @@ def verify(fname):
 
     # Output for verification
     print("\nThe local hash (Send this):\n\n    {}\n".format(clean_local))
-    print("The remote hash (Verify this):\n\n    {}\n".format(clean_remote))
+    print("The remote hash (Verify with this):\n\n    {}\n".format(clean_remote))
 
 
 if __name__ == "__main__":
 
     # Deal with script arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument("-V","--verify", help=("Print time generated hashes "
-            "from passwords stored in FILENAME"),dest='filename')
+    parser.add_argument("-V", "--verify", help=("Print time generated hashes "
+            "from passwords stored in FILENAME"), dest='filename')
     parser.add_argument("-s","--safe",help="Print url-safe hash",
-                        action="store_true")
+            action="store_true")
     args = parser.parse_args()
 
     if args.filename is not None:
