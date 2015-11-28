@@ -16,3 +16,8 @@ most are simple enough that they shouldn't be hard to customize.
 
 * **macspoof** - Generate a random MAC address for a system running El Capitan
   (Probably more OSX versions as well)
+
+* **hashgenerator** - This is a very simple implementation of a time based
+  (short) hash generator.  Two people using a predetermined password should
+  both be able to generate the same hash based on the day (UTC).  This could
+  easliy be extendended to shorter time periods.
