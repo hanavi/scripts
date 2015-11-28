@@ -1,4 +1,4 @@
-# (My Personal Scripts)
+# My Personal Scripts
 
 ### Overview
 This is just a collection of random scripts that I happen to write.  I am
