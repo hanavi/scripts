@@ -1,19 +1,33 @@
 #!/usr/bin/env python3
 
 #############################################################################
+#
 # File name: hashgenerator
 # Author: James Casey
 # Date created: 2015-11-27
 # Date last modified: 2015-11-27
-# Description: A short hash generator based on time and a seed password
-# Notes: Requires int.to_bytes() from Python 3.(something-or-other)
+#
+# Description: A short hash generator based on time and a seed password.
+#   Recently added hash verification! Store two passwords in a GPG encrypted
+#   and pass the file on the command line.  A hash will be generated for both
+#   passwords that updates every minute.  Switch the order of the password
+#   and supply to a friend (securly) where they can re-encrypt with their
+#   own PGP key and voila!  You can use the keys to verify identity...
+#   WARNING: DOES NOT PREVENT MITM ATTACKS!  Should be used in conjunction
+#   with secure encrypted communications where MITM is preventable but
+#   where you may need a little extra personal verification!
+#
+# Notes: Requires int.to_bytes() from Python 3.(something-or-other) and
+#   python3-gnupg (from pip or apt-get or some other source..?) along with
+#   a personal PGP key.
+#
 #############################################################################
 
 __author__ = "James Casey"
 __copyright__ = "Copyright 2015"
 __credits__ = ["James Casey"]
 __license__ = "GPL"
-__version__ = "0.1"
+__version__ = "0.2"
 __maintainer__ = "James Casey"
 __email__ = "hanavi@gmail.com"
 __status__ = "Production"
@@ -32,7 +46,8 @@ def get_count(timestep=None):
     """ Get the number of days between now and the final date.  This is used
     to determine the number of times we hash
 
-    The hash will change every day at midnight!
+    The hash will change every day at midnight or every minute based on the
+    arguments passed.
     """
 
     ## The default behaviour for generating a daily hash
