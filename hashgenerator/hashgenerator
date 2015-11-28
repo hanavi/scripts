@@ -17,17 +17,16 @@
 #   with secure encrypted communications where MITM is preventable but
 #   where you may need a little extra personal verification!
 #
-# Notes: Requires int.to_bytes() from Python 3.(something-or-other) and
-#   python3-gnupg (from pip or apt-get or some other source..?) along with
-#   a personal PGP key.
-#
+# Notes: Requires int.to_bytes() from Python 3.(something-or-other).
+# This version of the script does not use python3-gnupg...  This is helpful
+# in a handful of cases where it may not be available (e.g. default Tails).
 #############################################################################
 
 __author__ = "James Casey"
 __copyright__ = "Copyright 2015"
 __credits__ = ["James Casey"]
 __license__ = "GPL"
-__version__ = "0.2"
+__version__ = "0.2b"
 __maintainer__ = "James Casey"
 __email__ = "hanavi@gmail.com"
 __status__ = "Production"
@@ -39,8 +38,15 @@ import hashlib
 import sys
 import getpass
 import argparse
+import subprocess
+import string
 
 class PasswordDecryptionError(Exception):
+    def __init__(self, message, errors):
+        super().__init__(message)
+        self.errors = errors
+
+class FileNameError(Exception):
     def __init__(self, message, errors):
         super().__init__(message)
         self.errors = errors
@@ -101,26 +107,18 @@ def load_passwords(fname):
     """ Load the passwords from a file encrypted for a local GPG private key
     """
 
-    # I think this is frowned upon by some standard somewhere, but by placing
-    # the gnupg import here, we allow the short hash generator to run even if
-    # we don't have python3-gnupg on a particular system (I am looking at you
-    # Tails).
-    import gnupg
+    # Our valid charachter list could probably be expanded but for the time
+    # being.... I don't really care
+    valid_chars = "{}{}_-.".format(string.ascii_letters,string.digits)
+    sanitized_fname = "".join([c if c in valid_chars else "_" for c in fname])
+    if fname != sanitized_fname:
+        raise FileNameError("Filename contains illegal characters","")
 
-    fd = open(fname,"rb")
+    p = subprocess.Popen(['gpg','-d', fname], stdout=subprocess.PIPE)
+    data = p.stdout.readlines()
 
-    gpg = gnupg.GPG()
-    data = gpg.decrypt_file(fd)
-
-    if data.status != "decryption ok":
-        raise(PasswordDecryptionError("Failed to decrypt passwords",
-                                      data.status))
-
-    data = data.data.decode()
-
-    passwords = data.split("\n")
-    my_password = passwords[0]
-    remote_password = passwords[1]
+    my_password = data[0].strip().decode()
+    remote_password = data[1].strip().decode()
 
     return (my_password,remote_password)
 
