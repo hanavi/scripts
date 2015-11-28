@@ -19,7 +19,7 @@ most are simple enough that they shouldn't be hard to customize.
   1. First it can act as a very simple implementation of a time based (short)
     hash generator.  Two people using a predetermined password should both be
     able to generate the same hash based on the date (UTC).
-  2. Second it has a verification feature. Two people can use this two verify
+  2. Second it has a verification feature. Two people can use this to verify
     their identities. It requires both individuals two have PGP keys and two
     preshared (secure) passwords.  The hashgenerator will read an encrypted
     file with two passwords (each on its own line) and use keys stored in
