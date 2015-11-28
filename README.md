@@ -1,6 +1,4 @@
-# scripts
-
-## (My Personal Scripts)
+# (My Personal Scripts)
 
 ### Overview
 This is just a collection of random scripts that I happen to write.  I am
@@ -17,7 +15,14 @@ most are simple enough that they shouldn't be hard to customize.
 * **macspoof** - Generate a random MAC address for a system running El Capitan
   (Probably more OSX versions as well)
 
-* **hashgenerator** - This is a very simple implementation of a time based
-  (short) hash generator.  Two people using a predetermined password should
-  both be able to generate the same hash based on the day (UTC).  This could
-  easliy be extendended to shorter time periods.
+* **hashgenerator** - This will do two things basic things:
+  # First it can act as a very simple implementation of a time based (short)
+    hash generator.  Two people using a predetermined password should both be
+    able to generate the same hash based on the date (UTC).
+  # Second it has a verification feature. Two people can use this two verify
+    their identities. It requires both individuals two have PGP keys and two
+    preshared (secure) passwords.  The hashgenerator will read an encrypted
+    file with two passwords (each on its own line) and use keys stored in
+    gpg to decrypt the file and generate a secure hash that will update every
+    minute.
+  You can output the options by running "hashgenerator -h"
