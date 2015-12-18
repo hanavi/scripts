@@ -5,7 +5,7 @@
 # File name: hashgenerator
 # Author: James Casey
 # Date created: 2015-11-27
-# Date last modified: 2015-11-27
+# Date last modified: 2015-12-17
 #
 # Description: A short hash generator based on time and a seed password.
 #   Recently added hash verification! Store two passwords in a GPG encrypted
@@ -27,7 +27,7 @@ __author__ = "James Casey"
 __copyright__ = "Copyright 2015"
 __credits__ = ["James Casey"]
 __license__ = "GPL"
-__version__ = "0.2"
+__version__ = "0.3"
 __maintainer__ = "James Casey"
 __email__ = "hanavi@gmail.com"
 __status__ = "Production"
@@ -39,11 +39,23 @@ import hashlib
 import sys
 import getpass
 import argparse
+import random
 
 class PasswordDecryptionError(Exception):
     def __init__(self, message, errors):
         super().__init__(message)
         self.errors = errors
+
+def get_random_seed(count=20):
+    seed = ""
+    for i in range(count):
+        c = random.randint(0,52)
+        if c < 26:
+            seed += chr(c+65)
+        else:
+            seed += chr(c-26+97)
+    return seed
+
 
 def get_count(timestep=None):
     """ Get the the amount of time between now and the final date.  This is
@@ -182,10 +194,20 @@ if __name__ == "__main__":
             "from passwords stored in FILENAME"), dest='filename')
     parser.add_argument("-s","--safe",help="Print url-safe hash",
             action="store_true")
+    parser.add_argument("-r","--random",help="Print random hash",
+            action="store_true")
     args = parser.parse_args()
 
     if args.filename is not None:
         verify(args.filename)
+        sys.exit()
+
+    if args.random:
+        password = get_random_seed()
+        if args.safe:
+            print(get_hash(password, hash_length=20, use_safe=True))
+        else:
+            print(get_hash(password, hash_length=20))
         sys.exit()
 
     # Safe only matters right now for the shor hash generator
