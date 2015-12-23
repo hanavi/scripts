@@ -196,11 +196,20 @@ if __name__ == "__main__":
             action="store_true")
     parser.add_argument("-r","--random",help="Print random hash",
             action="store_true")
+    parser.add_argument("-f","--file", help="Load password from file",
+            dest='keyfile')
     args = parser.parse_args()
 
-    if args.filename is not None:
-        verify(args.filename)
-        sys.exit()
+    password = None;
+    if args.keyfile is not None:
+        import gnupg
+        fd = open(args.keyfile,"rb")
+        gpg = gnupg.GPG()
+        data = gpg.decrypt_file(fd)
+        if data.status != "decryption ok":
+            raise(PasswordDecryptionError("Failed to decrypt passwords",
+                                      data.status))
+        password = data.data.decode().strip()
 
     if args.random:
         password = get_random_seed()
@@ -212,10 +221,12 @@ if __name__ == "__main__":
 
     # Safe only matters right now for the shor hash generator
     if args.safe:
-        password = getpass.getpass("Password: ")
+        if args.keyfile is None:
+            password = getpass.getpass("Password: ")
         print(get_hash(password, use_safe=True))
     else:
-        password = getpass.getpass("Password: ")
+        if args.keyfile is None:
+            password = getpass.getpass("Password: ")
         print(get_hash(password))
 
 

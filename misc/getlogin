@@ -1,7 +1,8 @@
 #!/bin/bash
 
-chatroom=$(hashgenerator -s)
 IFS=$' ' :; server=($(gpg -d ~/.chatserver.gpg))
+#chatroom=$(hashgenerator -s)
+chatroom=$(hashgenerator -s -f ~/.current)
 password=$(pwgen -ys 20 1)
 username=$(randword 1)
 loginname=$(hashgenerator -r)
@@ -16,8 +17,8 @@ echo "Password:     ${password}"
 echo ""
 echo "--------------------------------------------------"
 echo ""
-echo "Chat Server:  ${server[1]}"
 echo "Chat Room:    ${chatroom}"
+echo "Chat Server:  ${server[1]}"
 echo "Chat Name:    ${username}"
 echo ""
 echo "=================================================="
