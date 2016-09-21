@@ -3,7 +3,7 @@
 IFS=$' ' :; server=($(gpg -d ~/.chatserver.gpg))
 #chatroom=$(hashgenerator -s)
 chatroom=$(hashgenerator -s -f ~/.current)
-password=$(pwgen -ys 20 1)
+password=$(pwgen -sy 20 1)
 username=$(randword 1)
 loginname=$(hashgenerator -sr)
 

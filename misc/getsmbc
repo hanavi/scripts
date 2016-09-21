@@ -1,0 +1,5 @@
+#!/bin/bash
+
+mkdir -p ~/Downloads/smbc
+cd ~/Downloads/smbc
+curl http://www.smbc-comics.com  |grep "cc-comicbody" |tr = \\n |grep "http://www.smbc-comics.com/comics/" |awk '{print $1}' |tr -d \" | xargs wget
