@@ -1,0 +1,18 @@
+#!/bin/bash
+
+DLIST=$(cat /home/james/Downloads/youtube/dllist)
+TODAY=$(date -u +%Y%m%d)
+LASTDATE=$(date -d '7 days ago' +%Y%m%d)
+YOUTUBEDL=/usr/bin/youtube-dl
+DLDIR=/home/james/Downloads/youtube/${TODAY}-youtube
+
+
+mkdir -p ${DLDIR}
+cd ${DLDIR}
+
+for line in $DLIST
+do
+       ${YOUTUBEDL} --playlist-end 5 --dateafter=$LASTDATE -f 'mp4[height<480]' $line
+done
+
+/home/james/bin/sendtopole ${DLDIR}

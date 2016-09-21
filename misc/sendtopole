@@ -1,0 +1,18 @@
+#!/bin/bash
+
+DIR=${1%/}
+
+PARFILE=${DIR}.par2
+TGZFILE=${DIR}.tar.gz
+GPGFILE=${DIR}.tar.gz.gpg
+
+DBDIR=/home/james/Dropbox/xfer/pole/$(date +%Y_%m_%d)
+
+tar -cvzf ${TGZFILE} --directory=${DIR} .
+gpg -e -R 3A3800D7B0682446 -o ${GPGFILE} ${TGZFILE}
+rar a -v10M -ep ${DIR}.rar ${GPGFILE}
+par2create ${PARFILE} ${DIR}.*.rar
+
+mkdir -p ${DBDIR}
+mv ${DIR}/../*.par2 ${DIR}/../*.rar ${DBDIR}
+rm ${TGZFILE} ${GPGFILE}
