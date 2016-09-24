@@ -3,7 +3,7 @@
 DBDIR=/home/james/Dropbox/xfer/home
 DLDIR=/home/james/Downloads/frompole
 
-FLIST=$(ls ${DBDIR}/*/filelist.*.dl)
+FLIST=$(ls ${DBDIR}/*/filelist.*.dl 2>/dev/null)
 
 for FNAME in ${FLIST}
 do
