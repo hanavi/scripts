@@ -30,7 +30,7 @@ do
     rm ${TGZFILE}
     if [[ -f ftp.dl ]]
     then
-      mv fpt.dl ..
+      mv ftp.dl ..
     fi
   fi
 done

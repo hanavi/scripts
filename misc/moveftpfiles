@@ -9,6 +9,7 @@ for FNAME in ${FLIST}
 do
   while read -r line
   do
+
     ULDIR=${ULBASEDIR}/$(echo ${line} | awk '{print $1}')
     DLFILE=$(dirname ${FNAME})/$(echo ${line} | awk '{print $2}')
     ULFILE=${ULDIR}/$(echo ${line} | awk '{print $2}')
@@ -19,4 +20,5 @@ do
       mv ${DLFILE} ${ULDIR}
     fi
   done < "${FNAME}"
+  mv ${FNAME} ${FNAME}.done
 done
