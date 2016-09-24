@@ -1,0 +1,22 @@
+#!/bin/bash
+
+DLDIR=/home/james/Downloads/frompole
+ULBASEDIR=/home/james/Downloads/ftp
+
+FLIST=$(ls ${DLDIR}/*/ftp.dl)
+
+for FNAME in ${FLIST}
+do
+  while read -r line
+  do
+    ULDIR=${ULBASEDIR}/$(echo ${line} | awk '{print $1}')
+    DLFILE=$(dirname ${FNAME})/$(echo ${line} | awk '{print $2}')
+    ULFILE=${ULDIR}/$(echo ${line} | awk '{print $2}')
+
+    mkdir -p $ULDIR
+    if [[ ! -f ${ULFILE} ]]
+    then
+      mv ${DLFILE} ${ULDIR}
+    fi
+  done < "${FNAME}"
+done

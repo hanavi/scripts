@@ -28,5 +28,9 @@ do
     cd ${BASENAME}
     tar -xzf ${TGZFILE}
     rm ${TGZFILE}
+    if [[ -f ftp.dl ]]
+    then
+      mv fpt.dl ..
+    fi
   fi
 done
