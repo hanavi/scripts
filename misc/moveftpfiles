@@ -1,7 +1,7 @@
 #!/bin/bash
 
 DLDIR=/home/james/Downloads/frompole
-ULBASEDIR=/home/james/Downloads/ftp
+ULBASEDIR=/mnt/raid/files/spweb/http/uploads
 
 FLIST=$(ls ${DLDIR}/*/ftp.dl)
 
