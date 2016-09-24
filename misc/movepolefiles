@@ -1,0 +1,32 @@
+#!/bin/bash
+
+DBDIR=/home/james/Dropbox/xfer/home
+DLDIR=/home/james/Downloads/frompole
+
+FLIST=$(ls ${DBDIR}/*/filelist.*.dl)
+
+for FNAME in ${FLIST}
+do
+  DATADIR=$(dirname ${FNAME})
+  WORKINGDIR=${DLDIR}/$(basename ${DATADIR})
+  DLFILE=$(basename ${FNAME})
+
+  cd ${DATADIR}
+  /usr/bin/sha512sum --status -c ${FNAME}
+  if (( $? == 0 ))
+  then
+    RARFILE=$(head -n 1 ${DLFILE} |awk '{print $2}')
+    BASENAME=${RARFILE%%.*}
+    TGZFILE=${BASENAME}.tar.gz
+    mv ${DATADIR} ${DLDIR}
+    cd ${WORKINGDIR}
+    rar x ${RARFILE}
+    mkdir ${BASENAME}
+    mkdir ${BASENAME}/rar
+    mv ${BASENAME}*.rar ${BASENAME}*.par2 ${BASENAME}/rar
+    mv ${TGZFILE} ${BASENAME}
+    cd ${BASENAME}
+    tar -xzf ${TGZFILE}
+    rm ${TGZFILE}
+  fi
+done
