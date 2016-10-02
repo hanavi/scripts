@@ -1,1 +1,26 @@
-../misc/getlogin
+#!/bin/bash
+
+IFS=$' ' :; server=($(gpg -d ~/.chatserver.gpg))
+#chatroom=$(hashgenerator -s)
+chatroom=$(hashgenerator -s -f ~/.current)
+password=$(pwgen -sy 20 1)
+username=$(randword 1)
+loginname=$(hashgenerator -sr)
+
+echo ""
+echo ""
+echo "=================================================="
+echo ""
+echo "Login Name:   ${loginname}"
+echo "Login Server: ${server[0]}"
+echo "Password:     ${password}"
+echo ""
+echo "--------------------------------------------------"
+echo ""
+echo "Chat Room:    ${chatroom}"
+echo "Chat Server:  ${server[1]}"
+echo "Chat Name:    ${username}"
+echo ""
+echo "=================================================="
+echo ""
+echo ""

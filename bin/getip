@@ -1,1 +1,5 @@
-../misc/getip
+#!/bin/bash
+
+# Found on the interwebs...
+
+wget http://ipecho.net/plain -O - -q ; echo

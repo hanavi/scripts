@@ -4,7 +4,13 @@ DIR=$(readlink -f "$1")
 DIRNAME=$(echo "${DIR}" |awk 'BEGIN{FS="/"}{print $(NF)}' | sed 's/ /_/g')
 
 DATE=$(date +%Y_%m_%d)
-DBDIR=/home/james/Dropbox/xfer/home/${DATE}
+
+DBDIR=/home/james/Dropbox/xfer/home_mac/${DATE}
+if [[ $1 = 'linux' ]]
+then
+       DBDIR=/home/james/Dropbox/xfer/home_linux/${DATE}
+fi
+
 TMPDIR=/tmp/${DATE}.home
 
 PARFILE=${TMPDIR}/${DIRNAME}.par2

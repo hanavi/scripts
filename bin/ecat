@@ -1,1 +1,3 @@
-../misc/ecat
+#!/bin/bash
+
+gpg -d $@

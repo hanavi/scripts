@@ -5,8 +5,13 @@ DIR=${1%/}
 PARFILE=${DIR}.par2
 TGZFILE=${DIR}.tar.gz
 GPGFILE=${DIR}.tar.gz.gpg
+DATE=$(date +%Y_%m_%d)
 
-DBDIR=/home/james/Dropbox/xfer/pole/$(date +%Y_%m_%d)
+DBDIR=/home/james/Dropbox/xfer/pole_mac/${DATE}
+if [[ $1 = 'linux' ]]
+then
+       DBDIR=/home/james/Dropbox/xfer/pole_linux/${DATE}
+fi
 
 tar -cvzf ${TGZFILE} --directory=${DIR} .
 gpg -e -R 3A3800D7B0682446 -o ${GPGFILE} ${TGZFILE}
