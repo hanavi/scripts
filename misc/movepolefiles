@@ -17,15 +17,16 @@ do
   /usr/bin/sha512sum --status -c ${FNAME}
   if (( $? == 0 ))
   then
-    RARFILE=$(head -n 1 ${DLFILE} |awk '{print $2}')
-    BASENAME=${RARFILE%%.*}
+    SPLITFIRST=$(head -n 1 ${DLFILE} |awk '{print $2}')
+    SPLITBASE=${SPLITFIRST%_*}
+    BASENAME=${SPLITFIRST%%.*}
     TGZFILE=${BASENAME}.tar.gz
     mv ${DATADIR} ${DLDIR}
     cd ${WORKINGDIR}
-    rar x ${RARFILE}
+    cat ${SPLITBASE}_* > $TGZFILE
     mkdir ${BASENAME}
-    mkdir ${BASENAME}/rar
-    mv ${BASENAME}*.rar ${BASENAME}*.par2 ${BASENAME}/rar
+    mkdir ${BASENAME}/split
+    mv ${SPLITBASE}_* ${BASENAME}/split
     mv ${TGZFILE} ${BASENAME}
     cd ${BASENAME}
     tar -xzf ${TGZFILE}
