@@ -1,8 +1,0 @@
-#!/bin/bash
-
-mkdir -p ~/Downloads/xkcd
-cd ~/Downloads/xkcd
-curl www.xkcd.com |tee xkcd.txt |grep embedding |awk '{print $5}' |xargs wget
-FILE=$(cat xkcd.txt |grep title |grep img |awk '{print $2}' |awk 'BEGIN{FS="/"}{print $5}' |tr -d \")
-cat xkcd.txt |grep title |grep img |awk 'BEGIN{FS="\""}{print $4}' > ${FILE}.txt
-rm xkcd.txt
